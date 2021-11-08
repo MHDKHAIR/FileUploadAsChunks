@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="col-12">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="display-4">Welcome To File Uploader</h1>
+            <p>Learn about <a href="https://uppy.io/">building Web apps with ASP.NET Core</a>.</p>
+        </div>
+    </div>
+</div>
+<div class="col-12">
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="grid">
+                <div class="column-full">
+                    <div class="UppyInput"></div>
+                    <div class="UppyInput-Progress"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center">
+            <!-- Uploaded files list -->
+            <div class="uploaded-files">
+                <h5>Uploaded files:</h5>
+                <ol></ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section CSS {
+    <link href="~/lib/uppy/uppy.min.css" rel="stylesheet" />
+}
+@section Scripts{
+    <script src="~/lib/uppy/uppy.min.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            const uppyOne = new Uppy.Core({
+                debug: true,
+                autoProceed: false,
+                allowMultipleUploadBatches: true,
+                restrictions: {
+                    allowedFileTypes: ['video/*'],
+                }
+            });
+            uppyOne.use(Uppy.FileInput,
+                {
+                    target: '.UppyInput',
+                    pretty: true
+                })
+                .use(Uppy.XHRUpload,
+                    {
+                        endpoint: '@Url.Action("UploadFile")', formData: true,
+                        fieldName: 'LargeFile'
+                    })
+                .use(Uppy.StatusBar, {
+                    target: '.UppyInput-Progress',
+                    hideUploadButton: false,
+                    hideAfterFinish: false
+                })
+
+            // And display uploaded files
+            uppyOne.on('upload-success', (file, response) => {
+                const url = response.uploadURL
+                const fileName = file.name
+
+                const li = document.createElement('li')
+                const a = document.createElement('a')
+                a.href = url
+                a.target = '_blank'
+                a.appendChild(document.createTextNode(fileName))
+                li.appendChild(a)
+
+                document.querySelector('.uploaded-files ol').appendChild(li)
+            })
+        });
+    </script>
+}

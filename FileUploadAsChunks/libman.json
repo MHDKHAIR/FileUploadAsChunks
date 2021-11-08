@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "uppy@2.2.2",
+      "destination": "wwwroot/lib/uppy/",
+      "files": [
+        "uppy.min.js",
+        "uppy.min.css",
+        "uppy.min.js.map"
+      ]
+    }
+  ]
+}
